@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
+import svgLoader from 'vite-svg-loader'
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -8,7 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '') // eslint-disable-line
 
   return {
-    plugins: [vue()],
+    plugins: [vue(), svgLoader()],
     server: {
       port: 3000 // default: 5173
     },
