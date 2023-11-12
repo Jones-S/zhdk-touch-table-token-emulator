@@ -12,41 +12,18 @@ defineProps({
 
 const token = ref(null)
 
-const startDrag = (evt, item) => {
-  console.log('item: ', item)
-  evt.dataTransfer.dropEffect = 'move'
-  evt.dataTransfer.effectAllowed = 'move'
-  evt.dataTransfer.setData('itemID', item.id)
-}
-
-const dragEnterMethod = (evt, item) => {
-  console.log('item: ', item)
-  console.log('evt: ', evt)
-}
-
-const onDrop = (evt, list) => {
-  const itemID = evt.dataTransfer.getData('itemID')
-  const item = this.items.find((item) => item.id == itemID)
-  item.list = list
-}
-
 const print = (val) => {
   console.log(val)
 }
 
-onMounted(() => {
-  console.log('token.value: ', token.value)
-  token.value.addEventListener('dragstart', startDrag)
-})
-
-const size = 4
-const cssSize = `${size}rem`
+const size = 50
+const cssSize = `${size}px`
 </script>
 
 <template>
   <Vue3DraggableResizable
-    :initW="110"
-    :initH="120"
+    :initW="size"
+    :initH="size"
     v-model:x="x"
     v-model:y="y"
     v-model:w="w"
@@ -67,9 +44,6 @@ const cssSize = `${size}rem`
       ref="token"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 245.6 245.6"
-      :style="`top: calc(${initialPosition.y * 100}% - ${size / 2}rem); left: calc(${
-        initialPosition.x * 100
-      }% - ${size / 2}rem);`"
       draggable="true"
       @dragstart.stop="startDrag"
       @dragenter="startDrag"
@@ -109,5 +83,12 @@ svg:hover {
 }
 .cls-3 {
   fill: #bfbfbf;
+}
+
+.vdr-container.active {
+  border: 0;
+}
+.vdr-container.active .cls-2 {
+  fill: rgb(126, 208, 126);
 }
 </style>
