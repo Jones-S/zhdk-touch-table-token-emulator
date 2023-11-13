@@ -24,6 +24,7 @@ const recalculateCanvas = () => {
 
 const sendUpdatedPosition = (data) => {
   if (socket) {
+    console.log('data: ', data)
     socket.send(JSON.stringify(data))
   }
 }
