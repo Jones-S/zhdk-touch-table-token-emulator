@@ -2,20 +2,12 @@
 import { ref, getCurrentInstance, onMounted, onUnmounted } from 'vue'
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 
-const emit = defineEmits(['update'])
-
-defineProps({
-  initialPosition: {
-    type: Object,
-    default: () => {},
-    required: false
-  }
-})
+const emit = defineEmits(['update', 'destroy'])
 
 const instance = getCurrentInstance()
 const uuid = ref(instance.uid)
-const x = ref()
-const y = ref()
+const x = ref(window.innerWidth / 2)
+const y = ref(window.innerHeight / 2)
 const active = ref()
 const relativeX = ref(0)
 const relativeY = ref(0)
@@ -34,14 +26,20 @@ const rotate = (e) => {
     } else if (rotation.value < 0) {
       rotation.value = rotation.value + 360
     }
+    emitUpdate()
   }
-  emitUpdate()
 }
 
 const update = () => {
   relativeX.value = x.value / window.innerWidth
   relativeY.value = y.value / window.innerHeight
   emitUpdate()
+}
+
+const handleKey = (e) => {
+  if (e.keyCode === 8 || e.key === 'Backspace') {
+    emit('destroy', {})
+  }
 }
 
 const emitUpdate = () => {
@@ -60,10 +58,12 @@ const cssSize = `${size}px`
 
 onMounted(() => {
   window.addEventListener('wheel', rotate)
+  window.addEventListener('keyup', handleKey)
 })
 
 onUnmounted(() => {
   window.removeEventListener('wheel', rotate)
+  window.removeEventListener('keyup', handleKey)
 })
 </script>
 
