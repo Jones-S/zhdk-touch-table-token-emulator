@@ -1,6 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
+
+const emit = defineEmits(['update'])
 
 defineProps({
   initialPosition: {
@@ -11,9 +13,17 @@ defineProps({
 })
 
 const token = ref(null)
+const x = ref()
+const y = ref()
 
 const print = (val) => {
   console.log(val)
+}
+
+const update = () => {
+  const relativeX = x.value / window.innerWidth
+  const relativeY = y.value / window.innerHeight
+  emit('update', { x: x.value, y: y.value, relativeX, relativeY })
 }
 
 const size = 50
@@ -37,7 +47,7 @@ const cssSize = `${size}px`
     @resize-start="print('resize-start')"
     @dragging="print('dragging')"
     @resizing="print('resizing')"
-    @drag-end="print('drag-end')"
+    @drag-end="update()"
     @resize-end="print('resize-end')"
   >
     <svg

@@ -34,7 +34,6 @@ function createWindow() {
     mainWindow = null
   })
 }
-console.log(app)
 app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {

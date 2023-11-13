@@ -4,6 +4,7 @@ import RotaryToken from './RotaryToken.vue'
 
 const tokens = ref([])
 let id = 0
+let socket = false
 const canvasWidth = ref(window.innerWidth)
 const canvasHeight = ref(window.innerHeight)
 
@@ -21,8 +22,33 @@ const recalculateCanvas = () => {
   canvasHeight.value = window.innerHeight
 }
 
+const sendUpdatedPosition = (data) => {
+  if (socket) {
+    socket.send(JSON.stringify(data))
+  }
+}
+
+const connectToWebsocketServer = () => {
+  // create connection
+  const port = import.meta.env.VITE_WEBSOCKET_PORT
+  const server = `ws://localhost:${port}`
+  socket = new WebSocket(server)
+  socket.onopen = () => {
+    console.log('Websocket connection established')
+  }
+
+  socket.onerror = (error) => {
+    console.log(`WebSocket error: `, error)
+  }
+
+  socket.onmessage = (e) => {
+    console.log(e.data)
+  }
+}
+
 onMounted(() => {
   window.addEventListener('resize', recalculateCanvas)
+  connectToWebsocketServer()
 })
 </script>
 
@@ -34,6 +60,7 @@ onMounted(() => {
       v-for="token in tokens"
       :key="token.id"
       :initial-position="{ x: token.relativeX, y: token.relativeY }"
+      @update="sendUpdatedPosition"
     />
   </div>
 </template>
