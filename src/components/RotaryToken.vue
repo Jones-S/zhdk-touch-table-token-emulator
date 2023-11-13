@@ -35,17 +35,23 @@ const rotate = (e) => {
       rotation.value = rotation.value + 360
     }
   }
+  emitUpdate()
 }
 
 const update = () => {
   relativeX.value = x.value / window.innerWidth
   relativeY.value = y.value / window.innerHeight
+  emitUpdate()
+}
+
+const emitUpdate = () => {
   emit('update', {
     x: x.value,
     y: y.value,
     relativeX: relativeX.value,
     relativeY: relativeY.value,
-    id: uuid.value
+    id: uuid.value,
+    rotation: rotation.value
   })
 }
 
@@ -106,7 +112,7 @@ onUnmounted(() => {
         </tr>
         <tr>
           <td>Position:</td>
-          <td>[{{ relativeX }}, {{ relativeY }}]</td>
+          <td>[{{ relativeX.toFixed(3) }}, {{ relativeY.toFixed(3) }}]</td>
         </tr>
         <tr>
           <td>Rotation:</td>
@@ -131,10 +137,6 @@ svg:hover {
   height: 100%;
 }
 
-td {
-  vertical-align: top;
-}
-
 .cls-1 {
   fill: #e8eadf;
 }
@@ -150,10 +152,18 @@ td {
 }
 
 .meta {
-  font-family: monospace;
-  font-size: 8px;
   transform: translate(v-bind(cssSize), v-bind(cssSize));
   width: 200px;
+}
+
+table {
+  font-family: monospace;
+  font-size: 7px;
+  line-height: 1em;
+}
+
+td {
+  vertical-align: top;
 }
 
 .vdr-container.active {
