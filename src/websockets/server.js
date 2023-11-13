@@ -1,14 +1,11 @@
-import http from 'http'
+/* eslint-disable no-undef */
 
-const server = http.createServer()
-import WebSocket, { WebSocketServer } from 'ws'
+const WebSocket = require('ws')
 
-const startWebSocketServer = () => {
+function startWebSocketServer() {
   console.log('Starting websocket server...')
 
-  const wss = new WebSocketServer({ server, port: 6050 })
-
-  let currentFile = false
+  const wss = new WebSocket.Server({ port: 6050 })
 
   // if we have problems with broken connections:
   // https://github.com/websockets/ws#how-to-detect-and-close-broken-connections
@@ -16,7 +13,7 @@ const startWebSocketServer = () => {
   // for every new connection
   wss.on('connection', (ws) => {
     // for newly connected clients we send them the current file as a welcoming present
-    ws.send(JSON.stringify({ image: currentFile }))
+    ws.send('Hello, you are now connected to the websocket on port 6050! 🧦')
 
     ws.on('message', (message) => {
       // check what type of message it is
@@ -41,4 +38,4 @@ const startWebSocketServer = () => {
   })
 }
 
-export default startWebSocketServer
+module.exports = startWebSocketServer

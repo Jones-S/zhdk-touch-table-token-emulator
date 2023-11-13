@@ -7,7 +7,7 @@
 
 /* eslint-disable no-undef */
 const { app, BrowserWindow } = require('electron')
-// const startWebSocketServer = require('./src/websockets/server.js')
+const startWebSocketServer = require('./src/websockets/server.js')
 
 const url = require('url')
 const path = require('path')
@@ -45,5 +45,12 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-console.log('Starting websocket server...')
-// startWebSocketServer()
+console.log('startWebSocketServer(): ', startWebSocketServer)
+startWebSocketServer()
+
+// To test if the websocket is running just execute some JavaScript inside the browsers console:
+// const ws = new WebSocket('ws://localhost:6050')
+// ws.onopen = () => console.log('WebSocket connection opened')
+// ws.onmessage = (event) => console.log('Received message:', event.data)
+// ws.onclose = () => console.log('WebSocket connection closed')
+// ws.onerror = (error) => console.error('WebSocket error:', error)
