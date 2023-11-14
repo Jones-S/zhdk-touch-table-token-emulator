@@ -1,11 +1,16 @@
 <script setup>
-import { ref, getCurrentInstance, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 
 const emit = defineEmits(['update', 'destroy'])
 
-const instance = getCurrentInstance()
-const uuid = ref(instance.uid)
+const props = defineProps({
+  id: {
+    type: Number,
+    required: true
+  }
+})
+
 const x = ref(window.innerWidth / 2)
 const y = ref(window.innerHeight / 2)
 const active = ref()
@@ -38,17 +43,18 @@ const update = () => {
 
 const handleKey = (e) => {
   if (e.keyCode === 8 || e.key === 'Backspace') {
-    emit('destroy', {})
+    emit('destroy', { id: props.id })
   }
 }
 
 const emitUpdate = () => {
+  console.log('update')
   emit('update', {
     x: x.value,
     y: y.value,
     relativeX: relativeX.value,
     relativeY: relativeY.value,
-    id: uuid.value,
+    id: props.id,
     rotation: rotation.value
   })
 }
@@ -108,7 +114,7 @@ onUnmounted(() => {
       <table>
         <tr>
           <td>ID:</td>
-          <td>{{ uuid }}</td>
+          <td>{{ id }}</td>
         </tr>
         <tr>
           <td>Position:</td>
@@ -116,7 +122,7 @@ onUnmounted(() => {
         </tr>
         <tr>
           <td>Rotation:</td>
-          <td>{{ rotation }}</td>
+          <td>{{ rotation }}°</td>
         </tr>
       </table>
     </div>

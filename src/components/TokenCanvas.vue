@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import RotaryToken from './RotaryToken.vue'
 
 const tokens = ref([])
@@ -11,8 +11,40 @@ const addToken = () => {
   // const { x, y } = event
   // const relativeX = x / canvasWidth.value
   // const relativeY = y / canvasHeight.value
-  tokens.value.push({ empty: true })
-  socket.send('add')
+  const id = new Date().valueOf()
+
+  tokens.value.push({ id })
+
+  if (socket) {
+    socket.send(
+      JSON.stringify({
+        type: '/tracker/add',
+        args: {
+          id,
+          x: 0,
+          y: 0,
+          relativeX: 0,
+          relativeY: 0,
+          rotation: 0
+        }
+      })
+    )
+  }
+}
+
+const removeToken = (id) => {
+  tokens.value = []
+  // const index = tokens.value.findIndex((token) => token.id === id)
+
+  // if (index !== -1) {
+  //   tokens.value.splice(index, 1)
+  // }
+
+  // console.log('tokens.value: ', tokens.value)
+  // nextTick(() => {
+  //   console.log('tokens.value: ', tokens.value)
+  // })
+  console.log('TODO: add removal of item with id;', id)
 }
 
 const recalculateCanvas = () => {
@@ -23,7 +55,15 @@ const recalculateCanvas = () => {
 const sendUpdatedPosition = (data) => {
   if (socket) {
     console.log('udpated position data: ', data)
-    socket.send(JSON.stringify(data))
+
+    socket.send(
+      JSON.stringify({
+        type: '/tracker/update',
+        args: {
+          ...data
+        }
+      })
+    )
   }
 }
 
@@ -55,7 +95,13 @@ onMounted(() => {
   <div class="canvas">
     <div class="controls"><button @click="addToken">Add token</button></div>
     <div v-if="tokens.length <= 0" class="fallback-message">Place tokens here</div>
-    <RotaryToken v-for="(token, index) in tokens" :key="index" @update="sendUpdatedPosition" />
+    <RotaryToken
+      v-for="token in tokens"
+      :key="token.id"
+      @update="sendUpdatedPosition"
+      @destroy="removeToken"
+      :id="token.id"
+    />
   </div>
 </template>
 
