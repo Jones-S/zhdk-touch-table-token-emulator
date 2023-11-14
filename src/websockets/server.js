@@ -7,7 +7,8 @@ require('dotenv').config()
 function startWebSocketServer() {
   console.log('Starting websocket server...')
 
-  const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT })
+  const wss = new WebSocket.Server({ port: 6050 })
+  // const wss = new WebSocket.Server({ port: process.env.WEBSOCKET_PORT })
 
   // if we have problems with broken connections:
   // https://github.com/websockets/ws#how-to-detect-and-close-broken-connections
