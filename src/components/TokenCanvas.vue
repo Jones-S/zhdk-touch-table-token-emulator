@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
 import RotaryToken from './RotaryToken.vue'
 
 const tokens = ref([])

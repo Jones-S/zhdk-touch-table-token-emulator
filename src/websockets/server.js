@@ -20,20 +20,13 @@ function startWebSocketServer() {
     )
 
     ws.on('message', (message) => {
-      // check what type of message it is
-      if (message === 'clear') {
-        currentFile = false
-      } else {
-        // save image in current file for all clients that disconnect shortly after
-        currentFile = message
-
-        // Broadcast to all connected clients
-        wss.clients.forEach((client) => {
-          if (client !== ws && client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ image: currentFile }))
-          }
-        })
-      }
+      // Broadcast to all connected clients
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          const messageAsString = message.toString() // otherwise we receive a cryptic Buffer
+          client.send(messageAsString)
+        }
+      })
     })
   })
 
