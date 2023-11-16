@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 
 const WebSocket = require('ws')
-
 require('dotenv').config()
 
 function startWebSocketServer() {

@@ -44,7 +44,6 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-console.log('startWebSocketServer(): ', startWebSocketServer)
 startWebSocketServer()
 
 // To test if the websocket is running just execute some JavaScript inside the browsers console:

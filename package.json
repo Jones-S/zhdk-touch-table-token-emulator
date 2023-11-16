@@ -1,8 +1,10 @@
 {
   "name": "zhdk-touch-table-token-emulator",
-  "version": "0.0.0",
+  "productName": "Token Emulator",
+  "version": "1.0.0-alpha",
   "private": true,
   "main": "main.js",
+  "author": "Jonas Scheiwiller",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,12 +14,15 @@
     "electron": "electron .",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
     "electron-squirrel-startup": "^1.0.0",
     "http": "^0.0.1-security",
+    "osc": "^2.4.4",
     "vue": "^3.3.4",
     "vue3-draggable-resizable": "^1.6.5",
     "ws": "^8.14.2"
@@ -33,6 +38,7 @@
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "electron": "^27.0.4",
+    "electron-builder": "^24.6.4",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
     "prettier": "^3.0.3",
