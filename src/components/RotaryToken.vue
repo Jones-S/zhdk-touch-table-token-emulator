@@ -8,6 +8,11 @@ const props = defineProps({
   id: {
     type: Number,
     required: true
+  },
+  showMeta: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -17,10 +22,6 @@ const active = ref()
 const relativeX = ref(0)
 const relativeY = ref(0)
 const rotation = ref(0)
-
-const print = (val) => {
-  console.log(val)
-}
 
 const rotate = (e) => {
   // only rotate active element
@@ -42,8 +43,10 @@ const update = () => {
 }
 
 const handleKey = (e) => {
-  if (e.keyCode === 8 || e.key === 'Backspace') {
-    emit('destroy', { id: props.id })
+  if (active.value) {
+    if (e.keyCode === 8 || e.key === 'Backspace') {
+      emit('destroy', props.id)
+    }
   }
 }
 
@@ -82,47 +85,42 @@ onUnmounted(() => {
     v-model:active="active"
     :draggable="true"
     :resizable="false"
-    @activated="print('activated')"
-    @deactivated="print('deactivated')"
-    @drag-start="print('drag-start')"
-    @resize-start="print('resize-start')"
-    @dragging="print('dragging')"
-    @resizing="print('resizing')"
     @drag-end="update()"
-    @resize-end="print('resize-end')"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 245.6 245.6"
-      draggable="true"
-      @dragstart.stop="startDrag"
-      @dragenter="startDrag"
-      @dragenter.stop.prevent="dragEnterMethod"
-      @dragover.stop.prevent
-      @dragleave.stop.prevent="onDrop"
-    >
-      <!-- @drop.prevent.stop="droppedMethod" -->
-      <circle class="cls-3" cx="122.8" cy="122.8" r="122.8" />
-      <circle class="cls-2" cx="122.8" cy="122.8" r="119" />
-      <circle cx="122.8" cy="120.46" r="65.96" />
-      <g class="rotating" :style="`transform: rotate(${rotation}deg);`">
-        <circle class="cls-1" cx="122.8" cy="120.46" r="55.74" />
-        <polygon points="111.64 60.83 122.8 33.89 133.96 60.83 111.64 60.83" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250">
+      <circle id="knob-fill" class="st0" cx="125" cy="125" r="125" />
+      <circle id="fill" class="st1" cx="125" cy="125" r="121.13" />
+      <g class="rotating" :transform="`rotate(${rotation}, 125, 125)`">
+        <circle cx="125" cy="125" r="67.14" />
+        <circle class="st2" cx="125" cy="125" r="56.74" />
+        <g>
+          <polygon points="113.6,63.52 125,36 136.4,63.52 		" />
+          <polygon class="st3" points="136.4,186.48 125,214 113.6,186.48 		" />
+          <polygon class="st3" points="186.48,113.6 214,125 186.48,136.4 		" />
+          <polygon class="st3" points="63.52,136.4 36,125 63.52,113.6 		" />
+        </g>
       </g>
     </svg>
-    <div class="meta">
+
+    <div v-show="showMeta" class="meta">
       <table>
         <tr>
           <td>ID:</td>
           <td>{{ id }}</td>
         </tr>
         <tr>
-          <td>Position:</td>
+          <td>Pos:</td>
           <td>[{{ relativeX.toFixed(3) }}, {{ relativeY.toFixed(3) }}]</td>
         </tr>
         <tr>
-          <td>Rotation:</td>
+          <td>Angle:</td>
           <td>{{ rotation }}°</td>
+        </tr>
+        <tr>
+          <td class="soft" colspan="2">
+            Use mousewheel/trackpad to rotate<br />
+            and backspace to delete
+          </td>
         </tr>
       </table>
     </div>
@@ -130,6 +128,10 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.draggable {
+  z-index: 10;
+}
+
 svg {
   width: v-bind(cssSize);
   position: absolute;
@@ -143,18 +145,17 @@ svg:hover {
   height: 100%;
 }
 
-.cls-1 {
-  fill: #e8eadf;
-}
-.cls-2 {
-  fill: #666;
-}
-.cls-3 {
+.st0 {
   fill: #bfbfbf;
 }
-
-.rotating {
-  transform-origin: 50% 50%;
+.st1 {
+  fill: #666666;
+}
+.st2 {
+  fill: #e8eadf;
+}
+.st3 {
+  fill: none;
 }
 
 .meta {
@@ -163,7 +164,6 @@ svg:hover {
 }
 
 table {
-  font-family: monospace;
   font-size: 7px;
   line-height: 1em;
 }
@@ -172,10 +172,20 @@ td {
   vertical-align: top;
 }
 
+td.soft {
+  opacity: 0.5;
+  line-height: 1.2;
+}
+
 .vdr-container.active {
   border: 0;
 }
-.vdr-container.active .cls-2 {
-  fill: rgb(126, 208, 126);
+.vdr-container.active .st1 {
+  fill: var(--color-active);
+}
+
+.hint {
+  font-size: 7px;
+  opacity: 0.5;
 }
 </style>
