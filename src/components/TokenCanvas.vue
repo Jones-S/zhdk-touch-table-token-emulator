@@ -104,6 +104,7 @@ const connectToWebsocketServer = () => {
 
   socket.onerror = (error) => {
     console.log(`WebSocket error: `, error)
+    wsConnected.value = false
   }
 
   socket.onmessage = (e) => {

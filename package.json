@@ -14,7 +14,8 @@
     "start": "yarn build && electron .",
     "electron": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "builder": "electron-builder build"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

@@ -41,7 +41,7 @@ const status = computed(() => {
   bottom: 15px;
   left: 15px;
   padding: 0.7em;
-  font-size: 13px;
+  font-size: 10px;
   opacity: 0.5;
 }
 </style>
