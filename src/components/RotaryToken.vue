@@ -9,6 +9,10 @@ const props = defineProps({
     type: Number,
     required: true
   },
+  sessionId: {
+    type: Number,
+    required: true
+  },
   showMeta: {
     type: Boolean,
     required: false,
@@ -16,12 +20,18 @@ const props = defineProps({
   }
 })
 
-const x = ref(window.innerWidth / 2)
-const y = ref(window.innerHeight / 2)
+const x = ref(getRandomNumber(50, window.innerWidth - 220))
+const y = ref(getRandomNumber(50, window.innerHeight - 180))
 const active = ref()
 const relativeX = ref(0)
 const relativeY = ref(0)
 const rotation = ref(0)
+
+function getRandomNumber(min, max) {
+  const randomValue = Math.random()
+  const scaledValue = min + randomValue * (max - min)
+  return scaledValue
+}
 
 const rotate = (e) => {
   // only rotate active element
@@ -51,13 +61,13 @@ const handleKey = (e) => {
 }
 
 const emitUpdate = () => {
-  console.log('update')
   emit('update', {
     x: x.value,
     y: y.value,
     relativeX: relativeX.value,
     relativeY: relativeY.value,
     id: props.id,
+    sessionId: props.sessionId,
     rotation: rotation.value
   })
 }
@@ -68,6 +78,8 @@ const cssSize = `${size}px`
 onMounted(() => {
   window.addEventListener('wheel', rotate)
   window.addEventListener('keyup', handleKey)
+  // immediately send an update where the token is at
+  update()
 })
 
 onUnmounted(() => {
@@ -104,6 +116,10 @@ onUnmounted(() => {
 
     <div v-show="showMeta" class="meta">
       <table>
+        <tr>
+          <td>SessionId:</td>
+          <td>{{ sessionId }}</td>
+        </tr>
         <tr>
           <td>ID:</td>
           <td>{{ id }}</td>

@@ -12,6 +12,7 @@ const useFixedIDs = ref(false)
 const addingToken = ref(false)
 const wsConnected = ref(false)
 const tokenId = ref(1)
+const sessionId = ref(1)
 
 const saveToken = () => {
   addingToken.value = true
@@ -21,14 +22,15 @@ const addToken = () => {
   addingToken.value = false
   const id = useFixedIDs.value ? tokenId.value : new Date().valueOf()
 
-  tokens.value.push({ id })
+  tokens.value.push({ id, sessionId: sessionId.value })
 
   if (socket) {
     socket.send(
       JSON.stringify({
         type: '/tracker/add',
         args: {
-          id,
+          sessionId: sessionId.value,
+          id: id,
           x: 0,
           y: 0,
           relativeX: 0,
@@ -38,6 +40,8 @@ const addToken = () => {
       })
     )
   }
+
+  sessionId.value = sessionId.value + 1
 
   // try to increase the token number
   const parsedInput = parseInt(tokenId.value, 10)
@@ -55,17 +59,15 @@ const fixedIDButtonText = computed(() => {
 })
 
 const changeIDHandling = () => {
+  tokenId.value = 1
   removeAll()
   useFixedIDs.value = !useFixedIDs.value
 }
 
 const removeToken = (id) => {
-  console.log('id: ', id)
   tokens.value = tokens.value.filter((token) => {
-    console.log('toRaw(token): ', toRaw(token))
     return token.id !== id
   })
-  console.log('tokens.value: ', tokens.value)
 }
 
 const removeAll = () => {
@@ -79,8 +81,6 @@ const recalculateCanvas = () => {
 
 const sendUpdatedPosition = (data) => {
   if (socket) {
-    console.log('udpated position data: ', data)
-
     socket.send(
       JSON.stringify({
         type: '/tracker/update',
@@ -146,6 +146,7 @@ onMounted(() => {
       @update="sendUpdatedPosition"
       @destroy="removeToken"
       :id="token.id"
+      :session-id="token.sessionId"
       :show-meta="showMeta"
     />
     <InfoBox v-if="showMeta" :connected="wsConnected" />

@@ -15,7 +15,8 @@
     "electron": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "builder": "electron-builder build"
+    "builder": "electron-builder build",
+    "builder-win": "electron-builder build --win --ia32 --x64"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
