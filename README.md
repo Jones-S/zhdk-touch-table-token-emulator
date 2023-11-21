@@ -22,38 +22,38 @@ $ xattr -cr /Users/[filePath]/Token\ Emulator.app
 
 The messages look like this:
 
-```JSON
+```json
 // sent if the session ids within the alive message type change
 { type: '/tracker/add', args: { sessionId: 4 } }
 
 { type: '/tracker/remove', args: { sessionId: 4 } }
 ```
 
-````JSON
+```json
 {
-  type: '/tracker/add',
-  args: {
-    id: 3,
-    x: 0,
-    y: 0,
-    relativeX: 0,
-    relativeY: 0,
-    rotation: 0
+  "type": "/tracker/add",
+  "args": {
+    "id": 3,
+    "x": 0,
+    "y": 0,
+    "relativeX": 0,
+    "relativeY": 0,
+    "rotation": 0
   }
 }
 ```
 
-```JSON
+```json
 {
-  type: '/tracker/update',
-  args: {
-    sessionId: 2,
-    id: 2,
-    x: 142,
-    y: 634,
-    relativeX: 0.6030212044715881,
-    relativeY: 0.41140735149383545,
-    rotation: 156.60326030896937
+  "type": "/tracker/update",
+  "args": {
+    "sessionId": 2,
+    "id": 2,
+    "x": 142,
+    "y": 634,
+    "relativeX": 0.6030212044715881,
+    "relativeY": 0.41140735149383545,
+    "rotation": 156.60326030896937
   }
 }
-````
+```
