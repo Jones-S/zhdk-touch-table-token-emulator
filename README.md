@@ -22,8 +22,9 @@ $ xattr -cr /Users/[filePath]/Token\ Emulator.app
 
 The messages look like this:
 
+`add` and `remove` messages are sent if the session ids within the alive ( https://www.tuio.org/?specification > **Implementation Details**) message type change.
+
 ```json
-// sent if the session ids within the alive message type change
 { type: '/tracker/add', args: { sessionId: 4 } }
 
 { type: '/tracker/remove', args: { sessionId: 4 } }
